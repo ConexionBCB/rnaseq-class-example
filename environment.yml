@@ -1,0 +1,23 @@
+# Conda environment for the teaching RNA-seq pipeline.
+# Recreate locally, in Codespaces, or on MyBinder with:
+#   conda env create -f environment.yml
+name: rnaseq
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - fastqc=0.12
+  - trimmomatic=0.39
+  - star=2.7            # splice-aware aligner
+  - subread=2.0         # provides featureCounts
+  - samtools=1.20
+  - multiqc=1.21        # optional: aggregates QC reports
+  - bioconductor-edger  # differential expression
+  - r-base>=4.3
+  - r-ggplot2           # volcano plot
+  - r-pheatmap          # heatmap
+  - sra-tools           # prefetch / fasterq-dump
+  - pysradb             # GSM -> SRR lookup
+  - seqtk               # subsample FASTQ
+  - curl

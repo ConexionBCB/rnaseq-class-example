@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# MyBinder build hook — runs ONCE at image-build time (not per launch).
+# repo2docker executes this after installing environment.yml, so the
+# small STAR index is baked into the cached image and students never wait
+# for it. Keep it lightweight: Binder gives ~2 GB RAM, so only the yeast
+# reference below will fit.
+set -euo pipefail
+bash scripts/00_get_data.sh

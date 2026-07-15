@@ -1,0 +1,28 @@
+{
+  "name": "rnaseq-class",
+  "image": "mcr.microsoft.com/devcontainers/miniconda:3",
+
+  // Build the bioconda environment once, when the codespace is created.
+  "postCreateCommand": "conda env create -f environment.yml",
+
+  // Auto-activate the env in every new terminal.
+  "postStartCommand": "echo 'conda activate rnaseq' >> ~/.bashrc",
+
+  // STAR needs headroom even for a small genome. 4 cores / 16 GB is a
+  // sensible class machine; drop to 2 cores / 8 GB to conserve free-tier
+  // core-hours if you only use the yeast reference.
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "32gb"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "reditorsupport.r"
+      ]
+    }
+  }
+}
