@@ -1,5 +1,7 @@
 # rnaseq-class — a teaching RNA-seq pipeline in the cloud
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ConexionBCB/rnaseq-class-example/HEAD)
+
 A minimal, **runnable** RNA-seq pipeline for teaching, designed to fit inside
 free cloud tiers (GitHub Codespaces and MyBinder), with a matching Google Colab
 notebook.
@@ -90,13 +92,26 @@ The contrast in `scripts/de_analysis.R` is **mip6Δ vs control**; edit the
 
 ## Run it on MyBinder
 
-Make the repo public, then open
-`https://mybinder.org/v2/gh/<you>/rnaseq-class/HEAD`.
-`postBuild` builds the index at image-build time. In a terminal run
-`bash scripts/get_demo_data.sh && bash scripts/run_pipeline.sh` for the fast
-demo, or swap in `bash scripts/get_reads.sh` for the real data. Download
-results before you leave — Binder does not persist. (Downloading six real SRA
-runs may be tight in Binder's ~2 GB; the demo dataset avoids that entirely.)
+With the repo public, click the **launch binder** badge above, or open
+[`https://mybinder.org/v2/gh/ConexionBCB/rnaseq-class-example/HEAD`](https://mybinder.org/v2/gh/ConexionBCB/rnaseq-class-example/HEAD).
+The first launch builds the image (a few minutes; `postBuild` bakes the yeast
+reference + STAR index into it, so students don't wait for that later).
+
+When JupyterLab opens, start a terminal (**File ▸ New ▸ Terminal**) and run:
+
+```bash
+bash scripts/get_demo_data.sh     # simulate the tiny demo dataset
+bash scripts/run_pipeline.sh      # FastQC → STAR → featureCounts → edgeR
+```
+
+Results land in `figures/` (volcano + heatmap) and `counts/de_results.csv`.
+**Download them before you leave — Binder does not persist.** repo2docker
+installs `environment.yml` into the base env, so the tools are already on `PATH`;
+you don't need to activate anything.
+
+For the **real** GEO data instead of the demo, run `bash scripts/get_reads.sh` —
+but downloading six SRA runs can be tight in Binder's ~2 GB, so the demo dataset
+is the recommended path here.
 
 ## Run it in Google Colab
 

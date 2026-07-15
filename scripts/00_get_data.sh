@@ -6,9 +6,10 @@
 set -euo pipefail
 
 # --- make sure the pipeline's tools are on PATH --------------------------
-# In a fresh Codespaces/Binder terminal the 'rnaseq' conda env may not be
-# active yet — that is what causes "STAR: not found". Activate it if needed.
-if [ "${CONDA_DEFAULT_ENV:-}" != "rnaseq" ]; then
+# In Codespaces the tools live in the 'rnaseq' conda env; on MyBinder
+# repo2docker installs them into the base env (already on PATH). Activate
+# 'rnaseq' only if a tool is missing — a clean no-op on Binder.
+if ! command -v STAR >/dev/null 2>&1; then
   __base="$(conda info --base 2>/dev/null || echo /opt/conda)"
   # shellcheck disable=SC1091
   source "${__base}/etc/profile.d/conda.sh" 2>/dev/null || true

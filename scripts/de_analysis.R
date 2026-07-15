@@ -40,7 +40,7 @@ ggplot(res, aes(logFC, -log10(FDR), colour = sig)) +
   scale_colour_manual(values = c(up = "#b2182b", down = "#2166ac", ns = "grey70")) +
   geom_vline(xintercept = c(-1, 1), linetype = "dashed") +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
-  labs(title = "mip6\u0394 vs heat-shock control",
+  labs(title = "mip6 KO vs heat-shock control",
        x = "log2 fold change", y = "-log10 FDR", colour = NULL) +
   theme_bw()
 ggsave("figures/volcano.png", width = 7, height = 5, dpi = 150)
