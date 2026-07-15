@@ -12,6 +12,16 @@
 # Requires: pysradb, sra-tools, seqtk  (all in environment.yml).
 set -euo pipefail
 
+# --- make sure the pipeline's tools are on PATH --------------------------
+# In a fresh Codespaces/Binder terminal the 'rnaseq' conda env may not be
+# active yet. Activate it if needed so pysradb/prefetch/seqtk are found.
+if [ "${CONDA_DEFAULT_ENV:-}" != "rnaseq" ]; then
+  __base="$(conda info --base 2>/dev/null || echo /opt/conda)"
+  # shellcheck disable=SC1091
+  source "${__base}/etc/profile.d/conda.sh" 2>/dev/null || true
+  conda activate rnaseq 2>/dev/null || true
+fi
+
 N="${N:-1000000}"          # read pairs to keep per sample
 mkdir -p data raw
 

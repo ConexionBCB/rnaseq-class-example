@@ -55,15 +55,29 @@ The contrast in `scripts/de_analysis.R` is **mip6Δ vs control**; edit the
 
 1. Push this repo to GitHub.
 2. **Code ▸ Codespaces ▸ Create codespace on main.** The container builds and
-   `conda env create` runs automatically (first build ≈ 3–5 min).
-3. In the terminal:
+   the `rnaseq` conda environment is created automatically (first build ≈ 3–5 min).
+3. **Open a _new_ terminal** once the build finishes — the prompt should read
+   `(rnaseq)`, meaning the environment is active. Then run (use `bash`, not `sh`):
    ```bash
-   conda activate rnaseq
    bash scripts/00_get_data.sh      # reference + STAR index
    bash scripts/get_reads.sh        # download the GSE135568 samples
    bash scripts/run_pipeline.sh     # the full pipeline + figures
    ```
    Results: `counts/de_results.csv`, `figures/volcano.png`, `figures/heatmap.png`.
+
+   The scripts also re-activate the `rnaseq` env themselves, so they still work
+   in a terminal that was opened before the build finished.
+
+### Troubleshooting
+
+- **`STAR: not found` (or any tool not found)** — the `rnaseq` environment
+  isn't active. Open a fresh terminal (prompt shows `(rnaseq)`), or run
+  `conda activate rnaseq`. Always launch scripts with `bash scripts/…`, never
+  `sh scripts/…` — `sh` ignores the env and the script's `bash` shebang.
+- **"Cannot find R… change `r.rpath.linux`"** — this is fixed by the R-path
+  setting in `.devcontainer/devcontainer.json`. If you see it once on the very
+  first build (before the env exists), reload the window (Command Palette ▸
+  *Developer: Reload Window*) after the build completes.
 
 ## Run it on MyBinder
 

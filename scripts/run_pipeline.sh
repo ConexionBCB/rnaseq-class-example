@@ -7,10 +7,32 @@
 #             scripts/get_reads.sh    (download the GSE135568 samples)
 set -euo pipefail
 
+# --- make sure the pipeline's tools are on PATH --------------------------
+# In a fresh Codespaces/Binder terminal the 'rnaseq' conda env may not be
+# active yet — that is what causes "STAR: not found". Activate it if needed.
+if [ "${CONDA_DEFAULT_ENV:-}" != "rnaseq" ]; then
+  __base="$(conda info --base 2>/dev/null || echo /opt/conda)"
+  # shellcheck disable=SC1091
+  source "${__base}/etc/profile.d/conda.sh" 2>/dev/null || true
+  conda activate rnaseq 2>/dev/null || true
+fi
+
 THREADS="${THREADS:-4}"
 IDX=ref/star_index
 GTF=ref/genes.gtf
-ADAPTERS="$(dirname "$(command -v trimmomatic)")/../share/trimmomatic/adapters/TruSeq3-PE.fa"
+
+# Trimmomatic's bundled adapters live under share/. bioconda ships them in a
+# version-stamped directory (e.g. share/trimmomatic-0.39-2/), so resolve the
+# path with a glob and fall back gracefully instead of hard-coding a version.
+BIN_DIR="$(dirname "$(command -v trimmomatic)")"
+ADAPTERS="${BIN_DIR}/../share/trimmomatic/adapters/TruSeq3-PE.fa"
+if [ ! -f "$ADAPTERS" ]; then
+  ADAPTERS="$(ls "${BIN_DIR}/../share/"trimmomatic*/adapters/TruSeq3-PE.fa 2>/dev/null | head -n1 || true)"
+fi
+if [ -z "${ADAPTERS:-}" ] || [ ! -f "$ADAPTERS" ]; then
+  echo "Could not locate Trimmomatic's TruSeq3-PE.fa adapters. Is the 'rnaseq' env active?" >&2
+  exit 1
+fi
 
 mkdir -p qc trimmed aligned counts
 

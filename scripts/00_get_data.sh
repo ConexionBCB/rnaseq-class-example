@@ -5,6 +5,16 @@
 # Swap the URLs for your organism of choice once students have the idea.
 set -euo pipefail
 
+# --- make sure the pipeline's tools are on PATH --------------------------
+# In a fresh Codespaces/Binder terminal the 'rnaseq' conda env may not be
+# active yet — that is what causes "STAR: not found". Activate it if needed.
+if [ "${CONDA_DEFAULT_ENV:-}" != "rnaseq" ]; then
+  __base="$(conda info --base 2>/dev/null || echo /opt/conda)"
+  # shellcheck disable=SC1091
+  source "${__base}/etc/profile.d/conda.sh" 2>/dev/null || true
+  conda activate rnaseq 2>/dev/null || true
+fi
+
 mkdir -p ref
 cd ref
 
