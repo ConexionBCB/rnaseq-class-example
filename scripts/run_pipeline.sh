@@ -52,7 +52,10 @@ for R1 in "${reads[@]}"; do
   fastqc -q -t "$THREADS" -o qc "$R1" "$R2"
 
   echo ">>> Trimmomatic"
-  trimmomatic PE -threads "$THREADS" "$R1" "$R2" \
+  # -phred33 is stated explicitly: modern Illumina data is always phred33, and
+  # forcing it avoids Trimmomatic's "Unable to detect quality encoding" error
+  # when a file's quality scores span too narrow a range (e.g. the demo data).
+  trimmomatic PE -phred33 -threads "$THREADS" "$R1" "$R2" \
     "trimmed/${SAMPLE}_R1.fq.gz" "trimmed/${SAMPLE}_R1.unpaired.fq.gz" \
     "trimmed/${SAMPLE}_R2.fq.gz" "trimmed/${SAMPLE}_R2.unpaired.fq.gz" \
     "ILLUMINACLIP:${ADAPTERS}:2:30:10" \
