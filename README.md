@@ -100,5 +100,12 @@ runs may be tight in Binder's ~2 GB; the demo dataset avoids that entirely.)
 
 ## Run it in Google Colab
 
-Open `rnaseq-class.ipynb` in Colab, set the repo URL in the first code cell,
-and **Runtime ▸ Run all**. Cell 1 installs conda (the runtime restarts once).
+`rnaseq-class.ipynb` is **self-contained** — it needs no repo. Upload it to
+[Colab](https://colab.research.google.com) (*File ▸ Upload notebook*, or share
+it from Google Drive) and run the cells top to bottom; the notebook writes the
+two small files it needs (`samples.tsv`, `simulate_reads.py`) into the session
+itself. **Step 1 installs conda and restarts the runtime once** — that's
+expected; just continue with Step 2 after the restart. The differential-
+expression step runs **in R directly in the notebook** (via the `%R` magic, so
+the plots render inline). Colab is ephemeral, so the last cell zips and
+downloads `counts/` + `figures/`.
