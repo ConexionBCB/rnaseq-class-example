@@ -45,7 +45,9 @@ The contrast in `scripts/de_analysis.R` is **mip6Δ vs control**; edit the
 | `postBuild` | MyBinder build hook (builds the index into the image) |
 | `samples.tsv` | GSM → sample → group mapping |
 | `scripts/00_get_data.sh` | download yeast reference + build STAR index |
-| `scripts/get_reads.sh` | download & subsample the GSE135568 samples |
+| `scripts/get_demo_data.sh` | simulate a tiny demo dataset (fast, no downloads) |
+| `scripts/simulate_reads.py` | the read simulator behind `get_demo_data.sh` |
+| `scripts/get_reads.sh` | download & subsample the real GSE135568 samples |
 | `scripts/run_pipeline.sh` | FastQC → Trimmomatic → STAR → featureCounts → R |
 | `scripts/de_analysis.R` | edgeR + volcano plot + heatmap |
 | `rnaseq-class.ipynb` | the same pipeline as a Google Colab notebook |
@@ -59,14 +61,21 @@ The contrast in `scripts/de_analysis.R` is **mip6Δ vs control**; edit the
 3. **Open a _new_ terminal** once the build finishes — the prompt should read
    `(rnaseq)`, meaning the environment is active. Then run (use `bash`, not `sh`):
    ```bash
-   bash scripts/00_get_data.sh      # reference + STAR index
-   bash scripts/get_reads.sh        # download the GSE135568 samples
-   bash scripts/run_pipeline.sh     # the full pipeline + figures
+   bash scripts/00_get_data.sh      # reference + STAR index (small download)
+   bash scripts/get_demo_data.sh    # tiny simulated reads — runs in seconds
+   bash scripts/run_pipeline.sh     # the full pipeline + figures (~1 min)
    ```
    Results: `counts/de_results.csv`, `figures/volcano.png`, `figures/heatmap.png`.
 
    The scripts also re-activate the `rnaseq` env themselves, so they still work
    in a terminal that was opened before the build finished.
+
+   **Demo vs. real data.** `get_demo_data.sh` simulates a tiny paired-end
+   dataset from the yeast reference with a built-in expression difference
+   between the two groups — no large downloads, so the pipeline always runs in
+   a live class. To use the **real GSE135568 data** instead, swap that one line
+   for `bash scripts/get_reads.sh` (downloads six SRA runs — slower and
+   network-dependent; see the note under *Run it on MyBinder*).
 
 ### Troubleshooting
 
@@ -84,9 +93,10 @@ The contrast in `scripts/de_analysis.R` is **mip6Δ vs control**; edit the
 Make the repo public, then open
 `https://mybinder.org/v2/gh/<you>/rnaseq-class/HEAD`.
 `postBuild` builds the index at image-build time. In a terminal run
-`bash scripts/get_reads.sh && bash scripts/run_pipeline.sh`. Download results
-before you leave — Binder does not persist. (Downloading six SRA runs may be
-tight in 2 GB; use fewer samples or a smaller `N` on Binder.)
+`bash scripts/get_demo_data.sh && bash scripts/run_pipeline.sh` for the fast
+demo, or swap in `bash scripts/get_reads.sh` for the real data. Download
+results before you leave — Binder does not persist. (Downloading six real SRA
+runs may be tight in Binder's ~2 GB; the demo dataset avoids that entirely.)
 
 ## Run it in Google Colab
 

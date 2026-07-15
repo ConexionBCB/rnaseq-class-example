@@ -1,7 +1,14 @@
 # Sequencing reads land here
 
-`scripts/get_reads.sh` fills this folder from GEO **GSE135568** (see the table
-in the top-level README), producing paired-end, gzip-compressed FASTQ named:
+Two scripts can fill this folder, both producing the same paired-end,
+gzip-compressed FASTQ layout described below:
+
+- `scripts/get_demo_data.sh` — a **tiny simulated** dataset (fast, no big
+  downloads); the default for a live class.
+- `scripts/get_reads.sh` — the **real** GEO **GSE135568** samples (see the
+  table in the top-level README); slower and network-dependent.
+
+Both write files named:
 
     <sample>_R1.fastq.gz
     <sample>_R2.fastq.gz
